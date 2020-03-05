@@ -156,7 +156,7 @@ int gl3wInit(void)
 int gl3wInit2(GL3WGetProcAddressProc proc)
 {
 	load_procs(proc);
-	return 0; // parse_version();
+	return parse_version();
 }
 
 int gl3wIsSupported(int major, int minor)
