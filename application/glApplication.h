@@ -9,21 +9,19 @@ namespace me
             virtual ~glApplication() ;
 
         protected:
-            void on_wm_paint     ( HWND hwnd, UINT umsg, WPARAM wparam, LPARAM lparam, HDC hdc, const ::RECT& rect ) ;
-            void on_wm_create    ( HWND hwnd, UINT umsg, WPARAM wparam, LPARAM lparam ) ;
-            void on_wm_destroy   ( HWND hwnd, UINT umsg, WPARAM wparam, LPARAM lparam ) ;
-            void on_wm_size      ( HWND hwnd, UINT umsg, WPARAM wparam, LPARAM lparam, const ::RECT& rect ) ;
-            void on_idle         ( HWND hwnd, double secondsSinceEpoch ) ;
-            void on_wm_mousewheel( HWND hwnd, UINT umsg, WPARAM wparam, LPARAM lparam ) ;
+            virtual void on_wm_create    ( HWND hwnd, UINT umsg, WPARAM wparam, LPARAM lparam ) ;
+            virtual void on_wm_destroy   ( HWND hwnd, UINT umsg, WPARAM wparam, LPARAM lparam ) ;
+            virtual void on_wm_size      ( HWND hwnd, UINT umsg, WPARAM wparam, LPARAM lparam, const ::RECT& rect ) ;
+            virtual void on_idle         ( HWND hwnd ) ;
+            //virtual void on_wm_mousewheel( HWND hwnd, UINT umsg, WPARAM wparam, LPARAM lparam ) ;
+            virtual void on_wm_paint     ( HWND hwnd, UINT umsg, WPARAM wparam, LPARAM lparam, HDC hdc, const ::RECT& rect ) ;
+
+            virtual void on_gl_create ( HWND hwnd, HDC hdc, HGLRC hglrc ) ;
+            virtual void on_gl_destroy( HWND hwnd, HDC hdc, HGLRC hglrc ) ;
+            virtual void on_gl_paint  ( HWND hwnd, HDC hdc, HGLRC hglrc, const::RECT& rect, double secondsSinceEpoch ) ;
 
             HDC   _hdc = nullptr ;
             HGLRC _hrc = nullptr ;
-
-            GLuint _program = 0 ;
-            GLuint _vao     = 0 ;
-
-            long long _i         = 0  ;
-            int       _pixelSize = 10 ;
 
     } ; // end class
 

@@ -30,11 +30,6 @@ namespace me
         l::hlp::ods( "~glApplication" ) ;
     }
 
-    void glApplication::on_wm_paint( HWND hwnd, UINT umsg, WPARAM wparam, LPARAM lparam, HDC hdc, const ::RECT& rect )
-    {
-        // call on_gl_render
-    }
-
     void glApplication::on_wm_create( HWND hwnd, UINT umsg, WPARAM wparam, LPARAM lparam )
     {
         _hdc = ::GetDC( hwnd ) ;
@@ -90,58 +85,12 @@ namespace me
         l::hlp::ods( "OpenGL vendor: %s",   glGetString( GL_VENDOR   ) ) ;
         l::hlp::ods( "OpenGL renderer: %s", glGetString( GL_RENDERER ) ) ;
 
-
-        //-----------------------------------
-        // call on_gl_create
-
-        // fix this
-        auto vs_source = R"(
-#version 460 core                             
-                                              
-void main(void)                               
-{                                             
-    gl_Position = vec4( 0.0, 0.0, 0.0, 1.0 ) ;   
-} 
-)" ;
-
-        auto fs_source = 
-R"(
-#version 460 core                             
-                                              
-out vec4 color;                               
-                                              
-void main(void)                               
-{                                             
-    color = vec4( 0.0, 0.8, 1.0, 1.0 ) ;         
-}                                             
-)" ;
-
-        _program = ::glCreateProgram() ; 
-        auto fs = ::glCreateShader( GL_FRAGMENT_SHADER);
-        ::glShaderSource(fs, 1, &fs_source, NULL);
-        ::glCompileShader(fs);
-
-        auto vs = ::glCreateShader(GL_VERTEX_SHADER);
-        ::glShaderSource(vs, 1, &vs_source, NULL);
-        ::glCompileShader(vs);
-
-        ::glAttachShader(_program, vs);
-        ::glAttachShader(_program, fs);
-
-        ::glLinkProgram(_program);
-
-        ::glGenVertexArrays(1, &_vao); 
-        ::glBindVertexArray(_vao);
+        on_gl_create( hwnd, _hdc, _hrc ) ;
     }
 
     void glApplication::on_wm_destroy( HWND hwnd, UINT umsg, WPARAM wparam, LPARAM lparam )
     {
-        // call on_gl_destroy
-        ::glDeleteVertexArrays(1, &_vao);
-        ::glDeleteProgram(_program);
-
-
-        //------------------------------------------------
+        on_gl_destroy( hwnd, _hdc, _hrc ) ;
 
         if ( _hdc != nullptr ) 
              ::wglMakeCurrent( _hdc, nullptr ) ;
@@ -161,50 +110,103 @@ void main(void)
         ::glViewport( 0, 0, rect.right, rect.bottom ) ;
     }
 
-    //ALBy change to on_gl_render
-    // have on idle sleep ms
-    void glApplication::on_idle( HWND hwnd, double secondsSinceEpoch )
+    void glApplication::on_wm_paint(HWND hwnd, UINT umsg, WPARAM wparam, LPARAM lparam, HDC hdc, const ::RECT& rect )
     {
-        ::glClear( GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT | GL_STENCIL_BUFFER_BIT ) ;
-
-        _i++;
-
-        auto rad = s::fmod( (double) _i / 200.0, M_PI * 2.0 ) ;
-        auto r = s::sin( rad ) * 0.5 + 0.5 ;
-        auto g = s::cos( rad ) * 0.5 + 0.5 ;
-
-
-        //GLfloat red[] = { 1.0f, 0.0f, 0.0f, 1.0f };
-        GLfloat color[] = 
-        { 
-            (float) r, //(float)sin( _i / 10.0 ) * 0.5f + 0.5f, 
-            (float) g, // 0.0, //(float)cos( _i ) * 0.5f + 0.5f, 
-            0.0f, 
-            1.0f 
-        } ;
-        
-        ::glClearBufferfv( GL_COLOR, 0, color ) ;
-        ::glUseProgram( _program ) ;
-
-        ::glPointSize( (float) _pixelSize ) ;
-        ::glDrawArrays( GL_POINTS, 0, 1 ) ;
-
-        ::SwapBuffers( _hdc ) ; 
-
-        //l::hlp::sleep( 100 ) ;
+        on_idle( hwnd ) ;
     }
 
-    void glApplication::on_wm_mousewheel( HWND hwnd, UINT umsg, WPARAM wparam, LPARAM lparam )
+    void glApplication::on_idle( HWND hwnd ) 
     {
-        auto delta = GET_WHEEL_DELTA_WPARAM( wparam ) ;
+        ::RECT rect ;
+        ::GetClientRect( hwnd, &rect ) ;
 
-        if ( delta > 0 )
-             _pixelSize++ ;
-        else
-             _pixelSize-- ;
+        ::glClear( GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT | GL_STENCIL_BUFFER_BIT ) ;
 
-        if ( _pixelSize < 1 )
-             _pixelSize = 1 ;
+        on_gl_paint( hwnd, _hdc, _hrc, rect, l::hlp::secondsSinceEpoch() ) ;
+
+        ::SwapBuffers( _hdc ) ;
+    }
+
+    //void glApplication::on_wm_mousewheel( HWND hwnd, UINT umsg, WPARAM wparam, LPARAM lparam )
+    //{
+    //    auto delta = GET_WHEEL_DELTA_WPARAM( wparam ) ;
+
+    //    if ( delta > 0 )
+    //         _pixelSize++ ;
+    //    else
+    //         _pixelSize-- ;
+
+    //    if ( _pixelSize < 1 )
+    //         _pixelSize = 1 ;
+    //}
+
+    void glApplication::on_gl_create( HWND hwnd, HDC hdc, HGLRC hglrc )
+    {
+//        auto vs_source = R"(
+//#version 460 core                             
+//                                              
+//void main(void)                               
+//{                                             
+//    gl_Position = vec4( 0.0, 0.0, 0.0, 1.0 ) ;   
+//} 
+//)" ;
+//
+//        auto fs_source = 
+//R"(
+//#version 460 core                             
+//                                              
+//out vec4 color;                               
+//                                              
+//void main(void)                               
+//{                                             
+//    color = vec4( 0.0, 0.8, 1.0, 1.0 ) ;         
+//}                                             
+//)" ;
+//
+//        _program = ::glCreateProgram() ; 
+//        auto fs = ::glCreateShader( GL_FRAGMENT_SHADER ) ;
+//        ::glShaderSource( fs, 1, &fs_source, NULL ) ;
+//        ::glCompileShader( fs );
+//
+//        auto vs = ::glCreateShader( GL_VERTEX_SHADER ) ;
+//        ::glShaderSource( vs, 1, &vs_source, NULL ) ;
+//        ::glCompileShader(vs ) ;
+//
+//        ::glAttachShader( _program, vs ) ;
+//        ::glAttachShader( _program, fs ) ;
+//
+//        ::glLinkProgram( _program ) ;
+//
+//        ::glGenVertexArrays( 1, &_vao ) ; 
+//        ::glBindVertexArray( _vao ) ;
+    }
+
+    void glApplication::on_gl_destroy( HWND hwnd, HDC hdc, HGLRC hglrc ) 
+    {
+        //::glDeleteVertexArrays( 1, &_vao ) ;
+        //::glDeleteProgram( _program ) ;
+    }
+
+    void glApplication::on_gl_paint( HWND hwnd, HDC hdc, HGLRC hglrc, const::RECT& rect, double secondsSinceEpoch )
+    {
+        //_i++ ;
+
+        //auto rad = s::fmod( (double) _i / 200.0, M_PI * 2.0 ) ;
+        //auto r = s::sin( rad ) * 0.5 + 0.5 ;
+        //auto g = s::cos( rad ) * 0.5 + 0.5 ;
+
+        //float color[] = 
+        //{ 
+        //    (float) r, 
+        //    0.0f, 
+        //    1.0f 
+        //} ;
+        //
+        //::glClearBufferfv( GL_COLOR, 0, color ) ;
+        //::glUseProgram( _program ) ;
+
+        //::glPointSize( (float) _pixelSize ) ;
+        //::glDrawArrays( GL_POINTS, 0, 1 ) ;
     }
 
 } // end ns

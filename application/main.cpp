@@ -21,6 +21,8 @@
 #include "application.h"
 #include "a2wApplication.h"
 #include "glApplication.h"
+#include "pointApplication.h"
+
 
 namespace s = std ;
 namespace l = au::com::casaletto::_2020::lib ;
@@ -61,9 +63,10 @@ s::shared_ptr<l::application> getApplication( int argc, WCHAR** argv )
 {
     s::vector< s::shared_ptr<l::application> > list ;
 
-    list.push_back( s::make_shared<l::application>    ( "application" ) ) ;
-    list.push_back( s::make_shared<me::a2wApplication>( "a2w"         ) ) ;
-    list.push_back( s::make_shared<me::glApplication> ( "gl"          ) ) ;
+    list.push_back( s::make_shared<l::application>      ( "application" ) ) ;
+    list.push_back( s::make_shared<me::a2wApplication>  ( "a2w"         ) ) ;
+    list.push_back( s::make_shared<me::glApplication>   ( "gl"          ) ) ;
+    list.push_back( s::make_shared<me::pointApplication>( "point"       ) ) ;
 
     if ( argc < 2 ) return list[0] ;
 

@@ -112,7 +112,7 @@ void application::run( int argc, WCHAR** argv, int width, int height )
 
 void application::messageLoop( HWND hwnd )
 {
-    ::MSG msg ;
+    ::MSG  msg  ;
 
     while ( true ) 
     {
@@ -126,7 +126,7 @@ void application::messageLoop( HWND hwnd )
 
         try
         {
-            on_idle( hwnd, hlp::secondsSinceEpoch() ) ;
+            on_idle( hwnd ) ;
         }
         catch( const s::exception& ex )
         {
@@ -153,6 +153,11 @@ LRESULT CALLBACK application::wndProc( HWND hwnd, UINT umsg, WPARAM wparam, LPAR
                 ::PostMessage( hwnd, WM_CLOSE, 0, 0 ) ;
             }
             return 0 ;
+        }
+
+        case WM_ERASEBKGND:
+        {
+            return 1 ;
         }
 
         case WM_PAINT: 
@@ -289,11 +294,11 @@ void application::on_wm_paint( HWND hwnd, UINT umsg, WPARAM wparam, LPARAM lpara
     auto hbrush = ::CreateSolidBrush( RGB(0x80, 0x80, 0x80) ) ;
     ::FillRect( hdc, &rect, hbrush ) ;
 
-    auto str = hlp::format( L"hello world\n%S\n%dx%d", _title, rect.right, rect.bottom ) ;
+    auto str = hlp::format( L"%S\n%dx%d", _title, rect.right, rect.bottom ) ;
     
     ::RECT rect2 = rect ;
     ::RECT textrect = rect ;
-    ::DrawText( hdc, str.c_str(), -1, &textrect, DT_CALCRECT | DT_WORDBREAK ) ;
+    ::DrawText( hdc, str.c_str(), -1, &textrect, DT_CALCRECT | DT_WORDBREAK | DT_SINGLELINE ) ;
     rect2.top = rect.bottom/2 - textrect.bottom/2 ;
             
     ::SetTextColor( hdc, RGB( 0x00, 0x00, 0x00 ) ) ;
@@ -333,9 +338,8 @@ void application::on_wm_mousewheel( HWND hwnd, UINT umsg, WPARAM wparam, LPARAM 
 {
 }
 
-void application::on_idle( HWND hwnd, double secondsSinceEpoch ) 
+void application::on_idle( HWND hwnd ) 
 {
-    lib::hlp::sleep( 100 ) ;
 }
 
 } } } } } // end namespace

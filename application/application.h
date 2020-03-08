@@ -28,8 +28,7 @@ class application
         virtual void on_wm_create    ( HWND hwnd, UINT umsg, WPARAM wparam, LPARAM lparam ) ;
         virtual void on_wm_mousewheel( HWND hwnd, UINT umsg, WPARAM wparam, LPARAM lparam ) ;
         virtual void on_wm_char      ( HWND hwnd, UINT umsg, WPARAM wparam, LPARAM lparam ) ;
-
-        virtual void on_idle( HWND hwnd, double secondsSinceEpoch ) ; 
+        virtual void on_idle         ( HWND hwnd ) ; 
 
     public:
         application( const std::string& title ) ;
