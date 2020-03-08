@@ -71,6 +71,7 @@
     <ClCompile Include="a2wApplication.cpp" />
     <ClCompile Include="application.cpp" />
     <ClCompile Include="glApplication.cpp" />
+    <ClCompile Include="glProgram.cpp" />
     <ClCompile Include="hlp.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="pointApplication.cpp" />
@@ -79,6 +80,7 @@
     <ClInclude Include="a2wApplication.h" />
     <ClInclude Include="application.h" />
     <ClInclude Include="glApplication.h" />
+    <ClInclude Include="glProgram.h" />
     <ClInclude Include="hlp.h" />
     <ClInclude Include="pointApplication.h" />
   </ItemGroup>

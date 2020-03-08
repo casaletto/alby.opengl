@@ -29,14 +29,6 @@ namespace l = au::com::casaletto::_2020::lib ;
 
 s::shared_ptr<l::application> getApplication( int argc, WCHAR** argv )  ;
 
-//
-// TODO:
-// need glApplication base case
-//  pointApp: glApplication
-//  ch19app
-//
-
-
 int wmain( int argc, WCHAR** argv )
 {
     int rc = 0 ;

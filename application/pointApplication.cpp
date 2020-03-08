@@ -18,6 +18,15 @@
 namespace s = std ;
 namespace l = au::com::casaletto::_2020::lib ;
 
+//TODO
+//
+// move point around x y z
+// point colour and size
+// xyz axes, dump info
+// rotate axes , camera, perspective  
+// rotect xyz, zoom in and out
+//
+
 namespace me
 {
     pointApplication::pointApplication( const s::string& title )

@@ -13,7 +13,6 @@ namespace me
             virtual void on_wm_destroy   ( HWND hwnd, UINT umsg, WPARAM wparam, LPARAM lparam ) ;
             virtual void on_wm_size      ( HWND hwnd, UINT umsg, WPARAM wparam, LPARAM lparam, const ::RECT& rect ) ;
             virtual void on_idle         ( HWND hwnd ) ;
-            //virtual void on_wm_mousewheel( HWND hwnd, UINT umsg, WPARAM wparam, LPARAM lparam ) ;
             virtual void on_wm_paint     ( HWND hwnd, UINT umsg, WPARAM wparam, LPARAM lparam, HDC hdc, const ::RECT& rect ) ;
 
             virtual void on_gl_create ( HWND hwnd, HDC hdc, HGLRC hglrc ) ;
