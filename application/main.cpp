@@ -21,6 +21,7 @@
 #include "application.h"
 #include "a2wApplication.h"
 #include "glApplication.h"
+#include "glProgram.h"
 #include "pointApplication.h"
 
 

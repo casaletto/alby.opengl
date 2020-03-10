@@ -14,11 +14,14 @@ namespace me
             virtual void on_gl_destroy   ( HWND hwnd, HDC hdc, HGLRC hglrc ) ;
             virtual void on_gl_paint     ( HWND hwnd, HDC hdc, HGLRC hglrc, const::RECT& rect, double secondsSinceEpoch ) ;
 
-            GLuint _program = 0 ;
-            GLuint _vao     = 0 ;
-
             long _i = 0 ;
             int _pixelSize = 10 ;
+
+            glprogram::glProgram _program ;
+
+            static const char* _fragmentGsls ;
+            static const char* _vertexGsls   ;
+
 
     } ; // end class
 
